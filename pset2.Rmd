@@ -31,19 +31,115 @@ a. Let's illustrate this with a small simulation. Suppose the number of people i
 
 ```{r, echo = TRUE, include = TRUE}
 
+# Set parameters
+set.seed(666)
+lambda <- 2
+max_n <- 500
+
+# Generate sample means for each n
+sample_means <- sapply(1:max_n, function(n) {
+  mean(rpois(n, lambda))
+})
+
+# Plot results
+plot(1:max_n, sample_means, type = "l",
+     xlab = "Sample size (n)",
+     ylab = "Average people per car",
+     main = "Law of Large Numbers: Sample Mean of Poisson(λ = 2)")
+abline(h = lambda, col = "blue", lwd = 2, lty = 2)
+
 ```
 
 b. You collect data on 100 cars and compute the average number of people per car in this sample. Use the Central Limit Theorem to write down the approximate distribution of this quantity. 
 
+```{r, echo = TRUE, include = TRUE}
+
+```
+
 c. Let's examine this distribution more closely. Generate 10,000 replicates of the sample mean with $n=100$ and plot a histogram.^[Try using the `replicate` function rather than a loop, as this will speed things up considerably.] Are you convinced that the Normal approximation you found in the previous question is good enough? Compare this to $n=1$, $n=5$, and $n=30$, generating a histogram for each. (We're aiming to recreate the second row of Figure 10.5 from Slide 47 of Lecture 4.) Comment on what you observe. 
 
 ```{r, echo = TRUE, include = TRUE}
+library(ggplot2)
+
+# Setup
+set.seed(666)
+lambda <- 2
+reps   <- 10000
+Ns     <- c(1, 5, 30, 100)
+
+# Simulate sample means using replicate()
+sim_mat <- sapply(Ns, function(n) replicate(reps, mean(rpois(n, lambda))))
+colnames(sim_mat) <- paste0("n=", Ns)
+
+# Tidy for plotting
+df <- data.frame(
+  mean = as.vector(sim_mat),
+  n    = factor(rep(Ns, each = reps), levels = Ns)
+)
+
+# Normal curves to overlay
+xgrid <- seq(0, 5, by = 0.01)
+norm_curves <- do.call(rbind, lapply(Ns, function(n) {
+  data.frame(
+    x = xgrid,
+    y = dnorm(xgrid, mean = lambda, sd = sqrt(lambda / n)),
+    n = factor(n, levels = Ns)
+  )
+}))
+
+ggplot(df, aes(x = mean)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 40, fill = "lightgray", color = "black") +
+  geom_line(data = norm_curves, aes(x = x, y = y), linewidth = 1, color = "blue") +
+  facet_wrap(~ n, nrow = 2) +
+  coord_cartesian(xlim = c(0, 5)) +
+  labs(title = "Sampling distribution of the sample mean (Poisson λ = 2)",
+       x = "Sample mean", y = "Density") +
+  theme_minimal()
 
 ```
 
 d. Suppose the city government will enact measures to regulate the number of people allowed per car during rush hour if they think the mean is below 1.7 people per car. Using the Normal approximation from part (b) above, find the probability that you get a mean of 1.7 or less in your sample of 100, even though the true mean is 2. (Please give the theoretical answer, not a simulation. You can use `R` as a calculator.) What should you do to ensure that this probability stays below 1\%?
 
 ```{r, echo = TRUE, include = TRUE}
+
+# X_i ~ Poisson(lambda = 2)
+# Under the CLT, the sample mean is approximately Normal:
+# X̄_n ~ Normal(mean=lambda, variance = lambda / n)
+# For n = 100:
+lambda <- 2
+n <- 100
+mean_true <- lambda
+sd_true <- sqrt(lambda / n)
+
+# The city will act if the sample mean equal or less to 1.7
+threshold <- 1.7
+
+# Compute the probability of observing a mean equal or less 1.7
+p_value <- pnorm(threshold, mean = mean_true, sd = sd_true)
+p_value
+# app. 0.0169 or 1.7%
+
+# Interpretation output:
+cat(
+  "Using the CLT, we approximate the sampling distribution of the sample mean as ",
+  "Normal(μ = 2, σ² = 2/100). The probability that the observed mean is 1.7 or lower, ",
+  "even though the true mean is 2, equals Φ((1.7 - 2)/√(2/100)) =",
+  round(p_value, 4), 
+  ", which is about 1.7%. Thus, there is a 1.7% chance of falsely concluding the mean is below 1.7.\n"
+)
+
+# To ensure this false-alarm probability is below 1%, we solve for n:
+target_alpha <- 0.01
+z_alpha <- qnorm(1 - target_alpha)
+n_required <- ceiling(lambda / ((0.3 / z_alpha)^2))
+n_required
+
+# Interpretation output:
+cat(
+  "To reduce this probability below 1%, we need at least n =",
+  n_required,
+  "observations.\n"
+)
 
 ```
 
