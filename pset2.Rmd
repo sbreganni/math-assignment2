@@ -170,7 +170,18 @@ $P(X=x) = \frac{e^{-\lambda}\lambda^x}{x!}$
 Therefore, the likelihood function for the series of events is:
 
 $$
-L(\lambda) = \prod_{i=1}^{n}P(X_i = x_i) = \prod_{i=1}^{n} \left(\frac{e^{-\lambda}\lambda^{x_i}{x_i!}\right)
+L(\lambda) = \prod_{t=1}^{n}P(X_t=x_t) = \prod_{t=1}^{n}\left(\frac{e^{-\lambda}\lambda^{x_t}{x_t!}\right)
+$$
+
+Adding in the values for x:
+
+$$
+\begin{aligned}
+L(\lambda) = \prod_{t=1}^{5} \left(\frac{e^{-\lambda}\lambda^{x_t}}{x_t!}\right) 
+&= \left(\frac{e^{-\lambda}\lambda^{1}}{1!}\right)\left(\frac{e^{-\lambda}\lambda^{3}}{3!}\right)\left(\frac{e^{-\lambda}\lambda^{1}}{1!}\right)\left(\frac{e^{-\lambda}\lambda^{2}}{2!}\right)\left(\frac{e^{-\lambda}\lambda^{0}}{0!}\right) \\
+&= \left(\frac{e^{-\lambda}\lambda}{1}\right)\left(\frac{e^{-\lambda}\lambda^{3}}{6}\right)\left(\frac{e^{-\lambda}\lambda}{1}\right)\left(\frac{e^{-\lambda}\lambda^{2}}{2}\right)\left(\frac{e^{-\lambda}}{1}\right) \\
+&= \left(\frac{e^{-5\lambda}\lambda^{7}}{12}\right)
+\end{aligned}
 $$
 
 b.  Take the log of the likelihood you wrote down in part (a). Show all steps.
@@ -179,10 +190,21 @@ $$
 \begin{aligned}
 \ell(\lambda)
 &= \log L(\lambda) \\
-&= \log\left( \prod_{i=1}^n \frac{e^{-\lambda}\lambda^{x_i}}{x_i!} \right) \\
-&= \sum_{i=1}^n \log\left( \frac{e^{-\lambda}\lambda^{x_i}}{x_i!} \right) \\
-&= \sum_{i=1}^n ( x_i \log \lambda -\lambda - \log(x_i!) ) \\
-&= \log \lambda\sum_{i=1}^nx_i - n \lambda - \sum_{i=1}^n\log(x_i!)
+&= \log\left( \prod_{t=1}^n \frac{e^{-\lambda}\lambda^{x_t}}{x_t!} \right) \\
+&= \sum_{t=1}^n \log\left( \frac{e^{-\lambda}\lambda^{x_t}}{x_t!} \right) \\
+&= \sum_{t=1}^n ( x_t \log \lambda -\lambda - \log(x_t!) ) \\
+&= \log \lambda\sum_{t=1}^nx_t - n \lambda - \sum_{t=1}^n\log(x_t!)
+\end{aligned}
+$$
+
+Adding in the values for x:
+
+$$
+\begin{aligned}
+\ell(\lambda)
+&= \log \lambda\sum_{t=1}^5x_t - 5 \lambda - \sum_{t=1}^5\log(x_t!) \\
+&= \log \lambda(1+3+1+2+0) - 5 \lambda - (\log(1) + \log(6) + \log(1) + \log(2) + \log(1)) \\
+&= 7\log \lambda - 5 \lambda - 2.48
 \end{aligned}
 $$
 
@@ -190,28 +212,36 @@ c.  Maximize the log-likelihood from part (b) to derive an MLE estimator for $\l
 
 In order to maximize the log-likelihood function we must set $\frac{d\ell(\lambda)}{d\lambda} = 0$
 
-Where $\ell(\lambda) = \log \lambda\sum_{i=1}^nx_i - n \lambda - \sum_{i=1}^n\log(x_i!)$
+Where $\ell(\lambda) = \log \lambda\sum_{t=1}^nx_t - n \lambda - \sum_{t=1}^n\log(x_t!)$
 
 $$
 \begin{aligned}
 \frac{d\ell(\lambda)}{d\lambda}
-= -n + \frac{1}{\lambda}\sum_{i=1}^n x_i
+= -n + \frac{1}{\lambda}\sum_{t=1}^n x_t
 = 0 \\[8pt]
-\frac{1}{\lambda}\sum_{i=1}^n x_i = n \\[6pt]
-\frac{1}{\lambda} = \frac{n}{\sum_{i=1}^n x_i} \\[6pt]
-\lambda = \frac{\sum_{i=1}^n x_i}{n}.
+\frac{1}{\lambda}\sum_{t=1}^n x_t = n \\[6pt]
+\frac{1}{\lambda} = \frac{n}{\sum_{t=1}^n x_t} \\[6pt]
+\lambda = \frac{\sum_{i=1}^n x_t}{n}.
 \end{aligned}
 $$
 
-Therefore, the maximum likelihood estimator is $\hat{\lambda} = \frac{\sum_{i=1}^n x_i}{n}$.
+Adding in the values for x:
+
+$$
+\lambda = \frac{\sum_{i=1}^n x_t}{n} = \frac{1+3+1+2+0}{7} = \frac{7}{5} = 1.4
+$$
+
+Therefore, the maximum likelihood estimator is $\hat{\lambda} = \frac{\sum_{t=1}^n x_t}{n}$.
 
 d.  Interpret the $\hat{\lambda}$ you found in part (c) in your own words. What is this quantity conceptually, and how do you get it from the data?
 
-The $\hat{\lambda}$ is equal to the sample mean of the distribution; in this example therefore $\hat{\lambda}$ = 1.4
+$\hat{\lambda}$ is the sample mean of the counts and (for the Poisson model) the MLE of the Poisson rate: it estimates the average number of major floods per five-year period.
 
 e.  Show that you found the MLE by plotting the log likelihood on the y-axis against a series of candidate values for $\lambda$ ranging from 0 to 4 on the x-axis.
 
 ```{r, echo = TRUE, include = TRUE}
+set.seed(666)
+
 
 ```
 
@@ -227,11 +257,15 @@ a.  Assume: $$
 
 b.  Give the expression (in terms of $\alpha,\beta,y,n$) for the posterior mean of $\theta$.
 
-c.  Alternatively, we may consider using the priors below: \begin{align*}
+c.  Alternatively, we may consider using the priors below: $$
+    \begin{align*}
     &\BetaDist(1,1)\quad\text{(uniform)} \\
     &\BetaDist(0.5,0.5)\quad\text{(Jeffreys-type weak prior)} \\ 
     &\BetaDist(100,2)\quad\text{(strongly informative, favoring large \(\theta\))}
-    \end{align*} Please plot, on a common $\theta \in [0,1]$ axis, the posterior densities for the four priors (the baseline prior in part (a) and the alternative priors above).
+    \end{align*}
+    $$
+
+    Please plot, on a common $\theta \in [0,1]$ axis, the posterior densities for the four priors (the baseline prior in part (a) and the alternative priors above).
 
 ```{r, echo = TRUE, include = TRUE}
 
