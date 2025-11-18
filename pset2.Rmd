@@ -255,7 +255,7 @@ likelihood <- function(x, l){
 likelihood(flood_count, l = 1.4) # -7.129601
 
 # Plot setup
-lik_df <- data.frame(lambda = seq(0.001, 4, length.out = 100), # 0.0001 to avoid NaN
+lik_df <- data.frame(lambda = seq(0.001, 4, length.out = 100), # 0.001 to avoid NaN
                      likelihood = NA)
 lik_df$likelihood <- sapply(X = lik_df$lambda, FUN = likelihood, x = flood_count)
 
