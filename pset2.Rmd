@@ -231,17 +231,44 @@ $$
 \lambda = \frac{\sum_{i=1}^n x_t}{n} = \frac{1+3+1+2+0}{7} = \frac{7}{5} = 1.4
 $$
 
-Therefore, the maximum likelihood estimator is $\hat{\lambda} = \frac{\sum_{t=1}^n x_t}{n}$.
+he maximum likelihood estimator is $\hat{\lambda} = \frac{\sum_{t=1}^n x_t}{n} = 1.4$.
 
 d.  Interpret the $\hat{\lambda}$ you found in part (c) in your own words. What is this quantity conceptually, and how do you get it from the data?
 
 $\hat{\lambda}$ is the sample mean of the counts and (for the Poisson model) the MLE of the Poisson rate: it estimates the average number of major floods per five-year period.
 
+*Because each observation represents a five-year period, the estimated rate of 1.4 floods per period corresponds to roughly 0.28 major floods per year.*
+
 e.  Show that you found the MLE by plotting the log likelihood on the y-axis against a series of candidate values for $\lambda$ ranging from 0 to 4 on the x-axis.
 
 ```{r, echo = TRUE, include = TRUE}
+# Setup
 set.seed(666)
+flood_count <- c(1, 3, 1, 2, 0)
 
+# Log likelihood function
+likelihood <- function(x, l){
+  lik <- sum(x * log(l) - l - log(factorial(x)))
+  return(lik)
+}
+
+likelihood(flood_count, l = 1.4) # -7.129601
+
+# Plot setup
+lik_df <- data.frame(lambda = seq(0.001, 4, length.out = 100), # 0.0001 to avoid NaN
+                     likelihood = NA)
+lik_df$likelihood <- sapply(X = lik_df$lambda, FUN = likelihood, x = flood_count)
+
+# Log likelihood plot
+library(ggplot2)
+ggplot(lik_df, aes(x = lambda, y = likelihood)) + 
+  geom_point() + 
+  geom_line() + 
+  geom_hline(yintercept = max(lik_df$likelihood), color = "red") + 
+  geom_vline(xintercept = 1.4, color = "red") + 
+  xlab("Lambda") + 
+  ylab("Likelihood") + 
+  theme_minimal()
 
 ```
 
