@@ -270,7 +270,7 @@ c.  Maximize the log-likelihood from part (b) to derive an MLE estimator for $\l
 
 In order to maximize the log-likelihood function we must set $\frac{d\ell(\lambda)}{d\lambda} = 0$
 
-Where $\ell(\lambda) = \log \lambda\sum_{t=1}^nx_t - n \lambda - \sum_{t=1}^n\log(x_t!)$
+Where $\ell(\lambda) = - n \lambda + \log \lambda\sum_{t=1}^nx_t - \sum_{t=1}^n\log(x_t!)$
 
 $$
 \begin{aligned}
