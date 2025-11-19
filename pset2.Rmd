@@ -176,11 +176,15 @@ p_value
 # Interpretation output:
 ```
 
-Using the Central Limit Theorem, we approximate the sampling distribution of the sample mean as $$
+Using the Central Limit Theorem, we approximate the sampling distribution of the sample mean as 
+
+$$
 \bar{X}_{100} \approx \mathcal{N}\!\left(2,\; \frac{2}{100}\right).
 $$
 
-The probability that the observed mean is $1.7$ or lower, even though the true mean is $2$, is $$
+The probability that the observed mean is $1.7$ or lower, even though the true mean is $2$, is 
+
+$$
 \Pr(\bar{X}_{100} \le 1.7)
   = \Phi\!\left(\frac{1.7 - 2}{\sqrt{2/100}}\right)
   = 0.0169.
@@ -204,7 +208,7 @@ To reduce this probability below $1\%$, we need at least $n_{\text{required}} = 
 
 Bangladesh, home to 163 million people, is the world's most populous delta region; one-fourth of the country's land mass is only seven feet above sea level.\footnote{\url{https://www.nrdc.org/stories/bangladesh-country-underwater-culture-move}} Although the communities in Bangladesh's low-lying coastal regions have always been vulnerable to catastrophic flooding events, this seems to be happening with growing frequency. Is climate change increasing the occurrence of flooding in Bangladesh?
 
-We often use the Poisson distribution to model (rare) climate events such as earthquakes and hurricanes. So let $X_t$ be the number of major floods in Bangladesh in time period $t$, and let $X_t$ be distributed: $$ X_t \sim \text{Poisson}(\lambda) $$
+We often use the Poisson distribution to model (rare) climate events such as earthquakes and hurricanes. So let $X_t$ be the number of major floods in Bangladesh in time period $t$, and let $X_t$ be distributed: $$ X_t \sim \text{Poisson}(\lambda)$$
 
 a.  We observe the following number of floods in Bangladesh per five-year period for the first quarter of the 21st century:
 
@@ -327,7 +331,6 @@ ggplot(lik_df, aes(x = lambda, y = likelihood)) +
   xlab("Lambda") + 
   ylab("Log-likelihood") + 
   theme_minimal()
-
 ```
 
 ## 3. Bayesian Analysis
@@ -336,56 +339,69 @@ You monitor the presence of a blue--green algae species across freshwater sites.
 
 [^3]: This question is adapted from <https://avehtari.github.io/BDA_course_Aalto/assignments/assignment2.html>.
 
-a.  Assume: $$
-    y \sim \Binom(n,\theta), \qquad \theta \sim \BetaDist(\alpha,\beta).
-    $$ Take as a baseline prior $\alpha=2,\ \beta=10$. Using Beta--Binomial conjugacy, write down the posterior $p(\theta\mid y,n)$ and identify its parameters.
+a.  Assume: 
 
-If prior distribution is a beta distribution, so is the posterior \$\$ \begin{align*}
-p(\theta|y,n)
-&\propto p(y|\theta)p(\theta) \\
+$$
+    y \sim \Binom(n,\theta), \qquad \theta \sim \BetaDist(\alpha,\beta).
+$$ 
+    Take as a baseline prior $\alpha=2,\ \beta=10$. Using Beta--Binomial conjugacy, write down the posterior $p(\theta\mid y,n)$ and identify its parameters.
+
+If prior distribution is a beta distribution, so is the posterior 
+
+$$
+\begin{aligned}
+p(\theta|y,n) &\propto p(y|\theta)p(\theta) \\
     &\propto \theta^y(1-\theta)^{n-y}\theta^{\alpha-1}(1-\theta)^{\beta-1} \\
     &\propto \theta^{\alpha+y-1}(1-\theta)^{\beta+n-y-1} \\
-\\
 p(\theta|44,274)
 &\propto \theta^{2+44-1}(1-\theta)^{10+274-44-1} \\
 &\propto \theta^{45}(1-\theta)^{239} \\
-   
-\end{align*} \$\$
+\end{aligned} 
+$$
 
-this is the kernel of the beta distribution with updated parameters $$
-\begin{align*}
+this is the kernel of the beta distribution with updated parameters 
+
+$$
+\begin{aligned}
  \alpha&=\alpha+y, \ \beta=\beta+n-y \\ 
   \alpha&=2+44,  \ \beta=10+274-44 \\
    \alpha&=46, \  \beta=240 \\
- \\
  &=Beta(\theta; 46, 240) \\
-\end{align*}   
+\end{aligned}   
 $$
 
 b.  Give the expression (in terms of $\alpha,\beta,y,n$) for the posterior mean of $\theta$.
 
-\$\$ \begin{align*}
+$$
+\begin{aligned}
 E(\theta|y)
 &= \frac{\alpha+y}{\alpha+\beta+n} \\
-   
-\end{align*} \$\$
+\end{aligned}
+$$
 
-c.  Alternatively, we may consider using the priors below: $$
+c.  Alternatively, we may consider using the priors below: 
+
+$$
     \mathrm{Beta}(1,1)\quad\text{(uniform)}
-    $$ $$
+$$ 
+$$
     \mathrm{Beta}(0.5,0.5)\quad\text{(Jeffreys-type weak prior)}
-    $$ $$
-    \mathrm{Beta}(100,2)\quad\text{(strongly informative, favoring large $\theta$)}.
-    $$
+$$ 
+$$
+\mathrm{Beta}(100,2)\quad\text{(strongly informative, favoring large} \; \theta)
+$$
 
-    Please plot, on a common $\theta \in [0,1]$ axis, the posterior densities for the four priors (the baseline prior in part (a) and the alternative priors above).
+
+
+    Please plot, on a common $\theta \in [0,1]$ axis, the posterior densities for the four priors 
+    (the baseline prior in part (a) and the alternative priors above).
 
 ```{r, echo = TRUE, include = TRUE}
 S <- 44  # number of sites with algae
 n <- 274 # total number of sites
 
 
-theta <- seq(0.001, 0.999, length.out = 1000) #to make sure the jeffrey's type weak prior does not produce errors
+theta <- seq(0.001, 0.999, length.out = 1000) #allows for jeffrey's type prior 
 
 #plotting the prior and the posterior
 plot_posterior_distr <- function(a, b){
@@ -458,8 +474,9 @@ plot_posterior_distr(100, 2)     # Strongly informative
 par(mfrow=c(1,1))
 ```
 
-d.  In a few sentences, interpret how prior shape and strength influence the posterior relative to the data. Which prior(s) seem the most defensible in this context? If you were interested in monitoring algae presence, what would be your takeaway from this analysis?
+d.  In a few sentences, interpret how prior shape and strength influence the posterior relative to the data. Which prior(s) seem the most defensible in this context? If you were interested in monitoring algae presence, what would be your takeaway from this analysis? From comparing the four priors, **prior strength** (the sum \(\alpha + \beta\)) has the most substantial impact on the posterior. The three weak priors \(\mathrm{Beta}(2,10)\), \(\mathrm{Beta}(1,1)\), and 
+\(\mathrm{Beta}(0.5,0.5)\) all have small values of \(\alpha + \beta\) (12, 2, and 1 respectively) and yield 
+nearly identical posteriors centered around the data proportion \(44/274 \approx 0.16\). Their 
+posterior means all lie close to \(0.16\), despite having different prior means.This demonstrates that when priors are weak, the data dominates the inference. In other words, the fewer assumptions you encode in the prior, the more the data speaks for itself. In contrast, the strong prior \(\mathrm{Beta}(100,2)\), with \(\alpha + \beta = 102\), produces a noticeably 
+different posterior, with a posterior mean of approximately \(0.38\). which shifts the distribution considerably to the right.  The three weak priors are the most defensible in this context. They align with an objective/ reference prior (e.g., Jeffreys prior) and allow the data to drive the inference, consistently suggesting that algae are present at roughly \(12\%-20\%\) of sites. The large \(\mathrm{Beta}(100,2)\) prior would only be defensible if there were strong external evidence indicating a very high (a figure close to its high prior mean) and true algae prevalence, that is not reflected in the data here.
 
-From comparing the four priors, prior strength (the sum α + β) has the most substantial impact on the posterior. The three weak priors—Beta(2,10), Beta(1,1), and Beta(0.5,0.5)—all have small α + β values (12, 2, and 1 respectively) and yield nearly identical posteriors centered around the data proportion of 44/274 ≈ 0.16, with posterior means approximately around the posterior mean/mode of 0.16. This demonstrates that when priors are weak, the data dominates the inference. Ultimately, the less assumptions you go into analysis with, the more the data speaks for itself. In contrast, the strong prior Beta(100, 2) with α + β = 102 produces a much different posterior with mean ≈ 0.38, which shifts the distribution considerably to the right.
-
-The three weak priors are most defensible in this context. They align with the objective/reference prior approach (Jeffreys prior) and let the data speak for itself, consistently estimating algae presence at 12-20% of freshwater sites. This suggests algae is present but not dominant. The baseline Beta(2,10) prior is particularly reasonable as its prior mean (0.17) happens to align closely with the observed data proportion, though this prior is still weak enough not to dominate the inference. The Beta(100, 2) prior would only be defensible if there were strong external evidence suggesting much higher algae presence, such as one that reflects its much higher prior mean.
