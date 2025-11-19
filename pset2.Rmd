@@ -174,17 +174,25 @@ p_value
 # app. 0.0169 or 1.7%
 
 # Interpretation output:
-cat(
-  "Using the CLT, we approximate the sampling distribution\n",
-  "of the sample mean as Normal(mu = 2, sigma^2 = 2/100).\n",
-  "The probability that the observed mean is 1.7 or lower,\n",
-  "even though the true mean is 2, equals\n",
-  "Phi((1.7 - 2) / sqrt(2/100)) = 0.0169,\n",
-  "which is about 1.7%.\n",
-  "Thus, there is a 1.7% chance of falsely concluding\n",
-  "the mean is below 1.7.\n"
-)
+```
+Using the Central Limit Theorem, we approximate the sampling distribution
+of the sample mean as
+\[
+\bar{X}_{100} \approx \mathcal{N}\!\left(2,\; \frac{2}{100}\right).
+\]
 
+The probability that the observed mean is \(1.7\) or lower, even though the
+true mean is \(2\), is
+\[
+\Pr(\bar{X}_{100} \le 1.7)
+  = \Phi\!\left(\frac{1.7 - 2}{\sqrt{2/100}}\right)
+  = 0.0169.
+\]
+
+This corresponds to about \(1.7\%\), meaning there is a 1.7\% chance of falsely
+concluding that the mean is below \(1.7\).
+
+```{r, echo = TRUE, include = TRUE}
 # To ensure this false-alarm probability is below 1%, we solve for n:
 target_alpha <- 0.01
 z_alpha <- qnorm(1 - target_alpha)
@@ -192,13 +200,10 @@ n_required <- ceiling(lambda / ((0.3 / z_alpha)^2))
 n_required
 
 # Interpretation output:
-cat(
-  "To reduce this probability below 1%, we need at least n =",
-  n_required,
-  "observations.\n"
-)
-
 ```
+To reduce this probability below \(1\%\), we need at least
+\(n_{\text{required}} = `r n_required`\)
+observations.
 
 ## 2. Maximum Likelihood
 
