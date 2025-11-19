@@ -1,7 +1,7 @@
 ---
 title: "Math for Data Science: Problem Set 2"
 output: pdf_document
-author: "Group: GROUP_MEMBERS_NAMES" 
+author: "Group: Carl Harper, Eduardo Monte Jorge Hey Martins, Sofia Breganni" 
 date: "2025-11-11"
 header-includes:
   - \usepackage{comment}
