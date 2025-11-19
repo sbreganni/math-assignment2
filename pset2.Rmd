@@ -54,7 +54,6 @@ abline(h = lambda, col = "blue", lwd = 2, lty = 2)
 
 b.  You collect data on 100 cars and compute the average number of people per car in this sample. Use the Central Limit Theorem to write down the approximate distribution of this quantity.
 
-$$
 
 We observe the number of people per car for a sample of \(n = 100\) cars. Let
 \[
@@ -102,7 +101,6 @@ Thus, the approximate distribution of the average number of people per car in a 
 \]
 
 
-$$
 
 c.  Let's examine this distribution more closely. Generate 10,000 replicates of the sample mean with $n=100$ and plot a histogram.[^2] Are you convinced that the Normal approximation you found in the previous question is good enough? Compare this to $n=1$, $n=5$, and $n=30$, generating a histogram for each. (We're aiming to recreate the second row of Figure 10.5 from Slide 47 of Lecture 4.) Comment on what you observe.
 
@@ -220,7 +218,8 @@ Therefore, the likelihood function for the series of events is:
 
 $$
 L(\lambda) = \prod_{t=1}^{n} P(X_t = x_t)
-= \prod_{t=1}^{n} \left( \frac{e^{-\lambda} \lambda^{x_t}}{x_t!} \right).$$
+= \prod_{t=1}^{n} \left( \frac{e^{-\lambda} \lambda^{x_t}}{x_t!} \right).
+$$
 
 Adding in the values for x:
 
