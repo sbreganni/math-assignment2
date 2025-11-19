@@ -54,53 +54,59 @@ abline(h = lambda, col = "blue", lwd = 2, lty = 2)
 
 b.  You collect data on 100 cars and compute the average number of people per car in this sample. Use the Central Limit Theorem to write down the approximate distribution of this quantity.
 
+We observe the number of people per car for a sample of $n = 100$ cars. Let 
 
-We observe the number of people per car for a sample of \(n = 100\) cars. Let
-\[
+$$
 X_i = \text{number of people in car } i,\quad i = 1,\dots,100,
-\]
-and suppose that
-\[
-X_i \stackrel{\text{iid}}{\sim} \text{Poisson}(\lambda = 2).
-\]
+$$ 
 
-For a Poisson\((\lambda)\) random variable, we have
-\[
+and suppose that 
+
+$$
+X_i \stackrel{\text{iid}}{\sim} \text{Poisson}(\lambda = 2).
+$$
+
+For a Poisson$(\lambda)$ random variable, we have 
+
+$$
 \mathbb{E}[X_i] = \lambda = 2
 \quad\text{and}\quad
 \mathrm{Var}(X_i) = \lambda = 2.
-\]
+$$
 
-The sample mean number of people per car is
-\[
+The sample mean number of people per car is 
+
+$$
 \bar X_{100} = \frac{1}{100}\sum_{i=1}^{100} X_i.
-\]
+$$
 
-By the Central Limit Theorem, the sampling distribution of the sample mean is approximately Normal:
-\[
+By the Central Limit Theorem, the sampling distribution of the sample mean is approximately Normal: 
+
+$$
 \bar X_n \approx \mathcal{N}\!\left(\mathbb{E}[X_i],\ \frac{\mathrm{Var}(X_i)}{n}\right).
-\]
+$$
 
-Substituting \(\mathbb{E}[X_i] = 2\), \(\mathrm{Var}(X_i) = 2\), and \(n = 100\), we obtain
-\[
+Substituting $\mathbb{E}[X_i] = 2$, $\mathrm{Var}(X_i) = 2$, and $n = 100$, we obtain 
+
+$$
 \bar X_{100} \approx \mathcal{N}\!\left(2,\ \frac{2}{100}\right)
     = \mathcal{N}(2,\, 0.02).
-\]
+$$
 
-Equivalently, the standard error of the sample mean is
-\[
+Equivalently, the standard error of the sample mean is 
+
+$$
 \mathrm{SE}(\bar X_{100}) 
     = \sqrt{\frac{2}{100}} 
     = \sqrt{0.02}
     \approx 0.1414.
-\]
+$$
 
-Thus, the approximate distribution of the average number of people per car in a sample of 100 cars is
-\[
+Thus, the approximate distribution of the average number of people per car in a sample of 100 cars is 
+
+$$
 \boxed{\bar X_{100} \approx \mathcal{N}(2,\, 0.02).}
-\]
-
-
+$$
 
 c.  Let's examine this distribution more closely. Generate 10,000 replicates of the sample mean with $n=100$ and plot a histogram.[^2] Are you convinced that the Normal approximation you found in the previous question is good enough? Compare this to $n=1$, $n=5$, and $n=30$, generating a histogram for each. (We're aiming to recreate the second row of Figure 10.5 from Slide 47 of Lecture 4.) Comment on what you observe.
 
@@ -200,7 +206,9 @@ Bangladesh, home to 163 million people, is the world's most populous delta regio
 
 We often use the Poisson distribution to model (rare) climate events such as earthquakes and hurricanes. So let $X_t$ be the number of major floods in Bangladesh in time period $t$, and let $X_t$ be distributed: $$ X_t \sim \text{Poisson}(\lambda) $$
 
-a.  We observe the following number of floods in Bangladesh per five-year period for the first quarter of the 21st century: $$
+a.  We observe the following number of floods in Bangladesh per five-year period for the first quarter of the 21st century:
+
+$$
     \left[    \begin{array}{cc}
         1  & 2000-2004 \\
         3  & 2005-2009 \\
@@ -208,7 +216,9 @@ a.  We observe the following number of floods in Bangladesh per five-year period
         2  & 2015-2019 \\
         0  & 2020-2024
      \end{array} \right] 
-    $$ Please write down the likelihood of this series of events for some unknown $\lambda$, assuming the floods in each period are independent and identically distributed.
+$$ 
+    
+Please write down the likelihood of this series of events for some unknown $\lambda$, assuming the floods in each period are independent and identically distributed.
 
 The probability function for a Poisson distribution is:
 
@@ -240,8 +250,8 @@ $$
 &= \log L(\lambda) \\
 &= \log\left( \prod_{t=1}^n \frac{e^{-\lambda}\lambda^{x_t}}{x_t!} \right) \\
 &= \sum_{t=1}^n \log\left( \frac{e^{-\lambda}\lambda^{x_t}}{x_t!} \right) \\
-&= \sum_{t=1}^n ( x_t \log \lambda -\lambda - \log(x_t!) ) \\
-&= \log \lambda\sum_{t=1}^nx_t - n \lambda - \sum_{t=1}^n\log(x_t!)
+&= \sum_{t=1}^n (-\lambda + x_t \log \lambda - \log(x_t!) ) \\
+&= - n \lambda + \log \lambda\sum_{t=1}^nx_t - \sum_{t=1}^n\log(x_t!)
 \end{aligned}
 $$
 
@@ -251,8 +261,8 @@ $$
 \begin{aligned}
 \ell(\lambda)
 &= \log \lambda\sum_{t=1}^5x_t - 5 \lambda - \sum_{t=1}^5\log(x_t!) \\
-&= \log \lambda(1+3+1+2+0) - 5 \lambda - (\log(1) + \log(6) + \log(1) + \log(2) + \log(1)) \\
-&= 7\log \lambda - 5 \lambda - 2.48
+&= - 5 \lambda + \log \lambda(1+3+1+2+0) - (\log(1) + \log(6) + \log(1) + \log(2) + \log(1)) \\
+&= - 5 \lambda + 7\log \lambda - 2.48
 \end{aligned}
 $$
 
@@ -326,24 +336,19 @@ You monitor the presence of a blue--green algae species across freshwater sites.
 
 [^3]: This question is adapted from <https://avehtari.github.io/BDA_course_Aalto/assignments/assignment2.html>.
 
-a.  Assume: 
-$$
+a.  Assume: $$
     y \sim \Binom(n,\theta), \qquad \theta \sim \BetaDist(\alpha,\beta).
-    $$ 
-Take as a baseline prior $\alpha=2,\ \beta=10$. Using Beta--Binomial conjugacy, write down the posterior $p(\theta\mid y,n)$ and identify its parameters.
+    $$ Take as a baseline prior $\alpha=2,\ \beta=10$. Using Beta--Binomial conjugacy, write down the posterior $p(\theta\mid y,n)$ and identify its parameters.
 
 b.  Give the expression (in terms of $\alpha,\beta,y,n$) for the posterior mean of $\theta$.
 
-c. Alternatively, we may consider using the priors below:
-\[
-\mathrm{Beta}(1,1)\quad\text{(uniform)}
-\]
-\[
-\mathrm{Beta}(0.5,0.5)\quad\text{(Jeffreys-type weak prior)}
-\]
-\[
-\mathrm{Beta}(100,2)\quad\text{(strongly informative, favoring large $\theta$)}.
-\]
+c.  Alternatively, we may consider using the priors below: $$
+    \mathrm{Beta}(1,1)\quad\text{(uniform)}
+    $$ $$
+    \mathrm{Beta}(0.5,0.5)\quad\text{(Jeffreys-type weak prior)}
+    $$ $$
+    \mathrm{Beta}(100,2)\quad\text{(strongly informative, favoring large $\theta$)}.
+    $$
 
     Please plot, on a common $\theta \in [0,1]$ axis, the posterior densities for the four priors (the baseline prior in part (a) and the alternative priors above).
 
