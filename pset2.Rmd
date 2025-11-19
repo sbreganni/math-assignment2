@@ -325,7 +325,7 @@ ggplot(lik_df, aes(x = lambda, y = likelihood)) +
   geom_hline(yintercept = max(lik_df$likelihood), color = "red") + 
   geom_vline(xintercept = 1.4, color = "red") + 
   xlab("Lambda") + 
-  ylab("Likelihood") + 
+  ylab("Log-likelihood") + 
   theme_minimal()
 
 ```
