@@ -54,19 +54,19 @@ abline(h = lambda, col = "blue", lwd = 2, lty = 2)
 
 b.  You collect data on 100 cars and compute the average number of people per car in this sample. Use the Central Limit Theorem to write down the approximate distribution of this quantity.
 
-We observe the number of people per car for a sample of $n = 100$ cars. Let 
+We observe the number of people per car for a sample of $n = 100$ cars. Let
 
 $$
 X_i = \text{number of people in car } i,\quad i = 1,\dots,100,
-$$ 
+$$
 
-and suppose that 
+and suppose that
 
 $$
 X_i \stackrel{\text{iid}}{\sim} \text{Poisson}(\lambda = 2).
 $$
 
-For a Poisson$(\lambda)$ random variable, we have 
+For a Poisson$(\lambda)$ random variable, we have
 
 $$
 \mathbb{E}[X_i] = \lambda = 2
@@ -74,26 +74,26 @@ $$
 \mathrm{Var}(X_i) = \lambda = 2.
 $$
 
-The sample mean number of people per car is 
+The sample mean number of people per car is
 
 $$
 \bar X_{100} = \frac{1}{100}\sum_{i=1}^{100} X_i.
 $$
 
-By the Central Limit Theorem, the sampling distribution of the sample mean is approximately Normal: 
+By the Central Limit Theorem, the sampling distribution of the sample mean is approximately Normal:
 
 $$
 \bar X_n \approx \mathcal{N}\!\left(\mathbb{E}[X_i],\ \frac{\mathrm{Var}(X_i)}{n}\right).
 $$
 
-Substituting $\mathbb{E}[X_i] = 2$, $\mathrm{Var}(X_i) = 2$, and $n = 100$, we obtain 
+Substituting $\mathbb{E}[X_i] = 2$, $\mathrm{Var}(X_i) = 2$, and $n = 100$, we obtain
 
 $$
 \bar X_{100} \approx \mathcal{N}\!\left(2,\ \frac{2}{100}\right)
     = \mathcal{N}(2,\, 0.02).
 $$
 
-Equivalently, the standard error of the sample mean is 
+Equivalently, the standard error of the sample mean is
 
 $$
 \mathrm{SE}(\bar X_{100}) 
@@ -102,7 +102,7 @@ $$
     \approx 0.1414.
 $$
 
-Thus, the approximate distribution of the average number of people per car in a sample of 100 cars is 
+Thus, the approximate distribution of the average number of people per car in a sample of 100 cars is
 
 $$
 \boxed{\bar X_{100} \approx \mathcal{N}(2,\, 0.02).}
@@ -175,22 +175,18 @@ p_value
 
 # Interpretation output:
 ```
-Using the Central Limit Theorem, we approximate the sampling distribution
-of the sample mean as
-\[
-\bar{X}_{100} \approx \mathcal{N}\!\left(2,\; \frac{2}{100}\right).
-\]
 
-The probability that the observed mean is \(1.7\) or lower, even though the
-true mean is \(2\), is
-\[
+Using the Central Limit Theorem, we approximate the sampling distribution of the sample mean as $$
+\bar{X}_{100} \approx \mathcal{N}\!\left(2,\; \frac{2}{100}\right).
+$$
+
+The probability that the observed mean is $1.7$ or lower, even though the true mean is $2$, is $$
 \Pr(\bar{X}_{100} \le 1.7)
   = \Phi\!\left(\frac{1.7 - 2}{\sqrt{2/100}}\right)
   = 0.0169.
-\]
+$$
 
-This corresponds to about \(1.7\%\), meaning there is a 1.7\% chance of falsely
-concluding that the mean is below \(1.7\).
+This corresponds to about $1.7\%$, meaning there is a 1.7% chance of falsely concluding that the mean is below $1.7$.
 
 ```{r, echo = TRUE, include = TRUE}
 # To ensure this false-alarm probability is below 1%, we solve for n:
@@ -201,9 +197,8 @@ n_required
 
 # Interpretation output:
 ```
-To reduce this probability below \(1\%\), we need at least
-\(n_{\text{required}} = `r n_required`\)
-observations.
+
+To reduce this probability below $1\%$, we need at least $n_{\text{required}} = `r n_required`$ observations.
 
 ## 2. Maximum Likelihood
 
@@ -221,8 +216,8 @@ $$
         2  & 2015-2019 \\
         0  & 2020-2024
      \end{array} \right] 
-$$ 
-    
+$$
+
 Please write down the likelihood of this series of events for some unknown $\lambda$, assuming the floods in each period are independent and identically distributed.
 
 The probability function for a Poisson distribution is:
@@ -345,7 +340,35 @@ a.  Assume: $$
     y \sim \Binom(n,\theta), \qquad \theta \sim \BetaDist(\alpha,\beta).
     $$ Take as a baseline prior $\alpha=2,\ \beta=10$. Using Beta--Binomial conjugacy, write down the posterior $p(\theta\mid y,n)$ and identify its parameters.
 
+If prior distribution is a beta distribution, so is the posterior \$\$ \begin{align*}
+p(\theta|y,n)
+&\propto p(y|\theta)p(\theta) \\
+    &\propto \theta^y(1-\theta)^{n-y}\theta^{\alpha-1}(1-\theta)^{\beta-1} \\
+    &\propto \theta^{\alpha+y-1}(1-\theta)^{\beta+n-y-1} \\
+\\
+p(\theta|44,274)
+&\propto \theta^{2+44-1}(1-\theta)^{10+274-44-1} \\
+&\propto \theta^{45}(1-\theta)^{239} \\
+   
+\end{align*} \$\$
+
+this is the kernel of the beta distribution with updated parameters $$
+\begin{align*}
+ \alpha&=\alpha+y, \ \beta=\beta+n-y \\ 
+  \alpha&=2+44,  \ \beta=10+274-44 \\
+   \alpha&=46, \  \beta=240 \\
+ \\
+ &=Beta(\theta; 46, 240) \\
+\end{align*}   
+$$
+
 b.  Give the expression (in terms of $\alpha,\beta,y,n$) for the posterior mean of $\theta$.
+
+\$\$ \begin{align*}
+E(\theta|y)
+&= \frac{\alpha+y}{\alpha+\beta+n} \\
+   
+\end{align*} \$\$
 
 c.  Alternatively, we may consider using the priors below: $$
     \mathrm{Beta}(1,1)\quad\text{(uniform)}
@@ -358,7 +381,85 @@ c.  Alternatively, we may consider using the priors below: $$
     Please plot, on a common $\theta \in [0,1]$ axis, the posterior densities for the four priors (the baseline prior in part (a) and the alternative priors above).
 
 ```{r, echo = TRUE, include = TRUE}
+S <- 44  # number of sites with algae
+n <- 274 # total number of sites
 
+
+theta <- seq(0.001, 0.999, length.out = 1000) #to make sure the jeffrey's type weak prior does not produce errors
+
+#plotting the prior and the posterior
+plot_posterior_distr <- function(a, b){
+  # Compute prior density
+  prior_dens <- dbeta(theta, a, b)
+  
+  # Compute posterior density
+  post_dens <- dbeta(theta, a + S, b + n - S)
+  
+  # Prepare empty plot with appropriate limits
+  plot(theta, prior_dens, type="n",
+       ylim=c(0, max(prior_dens, post_dens)),
+       xlab=expression(theta), 
+       ylab="Density",
+       main=paste("Prior = Beta(", a, ",", b,")", sep=""))
+  
+  # Plot prior (dashed line)
+  lines(theta, prior_dens, col="green", lty=2, lwd=2)
+  
+  # Plot posterior (solid line)
+  lines(theta, post_dens, col="blue", lty=1, lwd=2)
+  
+  # Add legend
+  legend("topright", 
+         legend=c("Prior", "Posterior"),
+         col=c("green", "blue"),
+         lty=c(2, 1),
+         lwd=c(2, 2))
+}
+
+# Plot with baseline prior
+plot_posterior_distr(2, 10)
+plot_posterior_distr(1,1)
+plot_posterior_distr(0.5,0.5)
+plot_posterior_distr(100,2)
+```
+
+```{r, echo = TRUE, include = TRUE}
+
+a_post <- 46
+b_post <- 240
+
+# 95% Credible Interval, helps answer question
+lower <- qbeta(0.025, a_post, b_post)
+upper <- qbeta(0.975, a_post, b_post)
+
+cat("95% Credible Interval: [", round(lower, 3), ",", round(upper, 3), "]\n")
+
+# Posterior mean
+post_mean <- a_post / (a_post + b_post)
+cat("Posterior Mean:", round(post_mean, 3), "\n")
+
+# Posterior mode (peak of distribution)
+post_mode <- (a_post - 1) / (a_post + b_post - 2)
+cat("Posterior Mode:", round(post_mode, 3), "\n")
+```
+
+Plotting all the distributions side-by-side:
+
+```{r, echo = TRUE, include = TRUE}
+par(mfrow=c(2,2))
+
+# Plot all four priors
+plot_posterior_distr(2, 10)      # Baseline
+plot_posterior_distr(1, 1)       # Uniform
+plot_posterior_distr(0.5, 0.5)   # Jeffreys-type
+plot_posterior_distr(100, 2)     # Strongly informative
+
+# Reset to single plot
+par(mfrow=c(1,1))
 ```
 
 d.  In a few sentences, interpret how prior shape and strength influence the posterior relative to the data. Which prior(s) seem the most defensible in this context? If you were interested in monitoring algae presence, what would be your takeaway from this analysis?
+
+From comparing the four priors, prior strength (the sum α + β) has the most substantial impact on the posterior. The three weak priors—Beta(2,10), Beta(1,1), and Beta(0.5,0.5)—all have small α + β values (12, 2, and 1 respectively) and yield nearly identical posteriors centered around the data proportion of 44/274 ≈ 0.16, with posterior means approximately around the posterior mean/mode of 0.16. This demonstrates that when priors are weak, the data dominates the inference. Ultimately, the less assumptions you go into analysis with, the more the data speaks for itself. In contrast, the strong prior Beta(100, 2) with α + β = 102 produces a much different posterior with mean ≈ 0.38, which shifts the distribution considerably to the right.
+
+The three weak priors are most defensible in this context. They align with the objective/reference prior approach (Jeffreys prior) and let the data speak for itself, consistently estimating algae presence at 12-20% of freshwater sites. This suggests algae is present but not dominant. The baseline Beta(2,10) prior is particularly reasonable as its prior mean (0.17) happens to align closely with the observed data proportion, though this prior is still weak enough not to dominate the inference. The Beta(100, 2) prior would only be defensible if there were strong external evidence suggesting much higher algae presence, such as one that reflects its much higher prior mean.
